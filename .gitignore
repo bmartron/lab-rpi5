@@ -2,10 +2,10 @@
 .vault_pass
 .vault_pass.txt
 secrets.yml
-group_vars/*/secrets.yml
-group_vars/*/vault.yml
-host_vars/*/secrets.yml
-host_vars/*/vault.yml
+**/group_vars/*/secrets.yml
+**/group_vars/*/vault.yml
+**/host_vars/*/secrets.yml
+**/host_vars/*/vault.yml
 *.pem
 *.key
 .DS_Store

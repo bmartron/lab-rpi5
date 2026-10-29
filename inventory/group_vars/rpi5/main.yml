@@ -1,16 +1,29 @@
 ---
 # Packages KDE — Plasma 6 sur Trixie, Plasma 5.27 sur Bookworm
 kde_desktop_package: kde-plasma-desktop
+# Poste bureautique : bureau + apps utiles (sans kde-full)
 kde_extra_packages:
+  # Session graphique / RPi
   - sddm
+  - kde-config-sddm
   - gldriver-test
   - plasma-nm
-  - kde-config-sddm
-  - konsole
-  - dolphin
-  - firefox
   - pipewire
   - wireplumber
+  # Bureau KDE
+  - dolphin
+  - konsole
+  - kate
+  - gwenview
+  - okular
+  - ark
+  - kde-spectacle
+  - print-manager
+  - cups
+  # Bureautique
+  - libreoffice
+  - chromium
+  - thunderbird
 
 # Mettre true pour l'installation complète (lourde)
 kde_install_full: false

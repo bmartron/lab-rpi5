@@ -16,10 +16,10 @@ Auth **login / mot de passe** (pas de clé SSH) :
 |---|---|
 | Host | `192.168.1.234` |
 | User | `louise` |
-| Password | défini dans `group_vars/rpi5/secrets.yml` (fichier local, non versionné) |
+| Password | défini dans `inventory/group_vars/rpi5/secrets.yml` (fichier local, non versionné) |
 
 ```bash
-cp group_vars/rpi5/secrets.yml.example group_vars/rpi5/secrets.yml
+cp inventory/group_vars/rpi5/secrets.yml.example inventory/group_vars/rpi5/secrets.yml
 # éditer secrets.yml
 ```
 
