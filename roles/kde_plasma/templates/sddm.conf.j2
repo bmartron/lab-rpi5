@@ -1,0 +1,14 @@
+[General]
+DisplayServer={{ 'wayland' if (sddm_wayland | bool and (plasma_generation | default('5') | int) >= 6) else 'x11' }}
+
+[Theme]
+Current=breeze
+
+[Users]
+MaximumUid=60000
+MinimumUid=1000
+
+[Autologin]
+# Laisser vide = pas d'autologin (plus sûr)
+User=
+Session=

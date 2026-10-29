@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: bmartron
+  description: Préparation système Raspberry Pi OS / Debian
+  license: MIT
+  min_ansible_version: "2.14"
+dependencies: []

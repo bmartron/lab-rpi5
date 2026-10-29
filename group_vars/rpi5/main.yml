@@ -1,0 +1,30 @@
+---
+# Packages KDE — Plasma 6 sur Trixie, Plasma 5.27 sur Bookworm
+kde_desktop_package: kde-plasma-desktop
+kde_extra_packages:
+  - sddm
+  - gldriver-test
+  - plasma-nm
+  - kde-config-sddm
+  - konsole
+  - dolphin
+  - firefox
+  - pipewire
+  - wireplumber
+
+# Mettre true pour l'installation complète (lourde)
+kde_install_full: false
+
+# Cible graphique systemd
+graphical_target: graphical.target
+
+# Session préférée: plasma (Wayland) ou plasmax11
+plasma_preferred_session: plasma
+
+# Configurer SDDM en Wayland (recommandé sur Trixie / Plasma 6)
+sddm_wayland: true
+
+# Locale / clavier (adapter si besoin)
+system_locale: fr_FR.UTF-8
+keyboard_layout: fr
+timezone: Europe/Paris

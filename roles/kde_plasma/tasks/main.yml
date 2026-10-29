@@ -1,0 +1,84 @@
+---
+- name: Détecter la version Debian / Raspberry Pi OS
+  ansible.builtin.set_fact:
+    rpi_os_codename: "{{ ansible_lsb.codename | default(ansible_distribution_release) }}"
+    plasma_generation: "{{ '6' if (ansible_distribution_major_version | int) >= 13 else '5' }}"
+
+- name: Afficher la cible Plasma détectée
+  ansible.builtin.debug:
+    msg: >-
+      OS={{ ansible_distribution }} {{ ansible_distribution_version }}
+      ({{ rpi_os_codename }}) → KDE Plasma {{ plasma_generation }}
+
+- name: Installer KDE Plasma Desktop (métapaquet)
+  ansible.builtin.apt:
+    name: "{{ kde_desktop_package }}"
+    state: present
+  async: 7200
+  poll: 30
+
+- name: Installer KDE Full (optionnel)
+  ansible.builtin.apt:
+    name: kde-full
+    state: present
+  when: kde_install_full | bool
+  async: 10800
+  poll: 30
+
+- name: Installer paquets complémentaires Plasma / SDDM / GPU
+  ansible.builtin.apt:
+    name: "{{ kde_extra_packages }}"
+    state: present
+
+- name: Créer le répertoire de configuration SDDM
+  ansible.builtin.file:
+    path: /etc/sddm.conf.d
+    state: directory
+    mode: "0755"
+
+- name: Configurer SDDM (autologin désactivé, session Plasma)
+  ansible.builtin.template:
+    src: sddm.conf.j2
+    dest: /etc/sddm.conf.d/kde.conf
+    mode: "0644"
+
+- name: Configurer SDDM Wayland (Plasma 6 / Trixie)
+  ansible.builtin.copy:
+    dest: /etc/sddm.conf.d/wayland.conf
+    mode: "0644"
+    content: |
+      [General]
+      DisplayServer=wayland
+      GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
+
+      [Wayland]
+      CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1
+  when: sddm_wayland | bool and (plasma_generation | int) >= 6
+
+- name: Définir SDDM comme display manager par défaut
+  ansible.builtin.file:
+    src: /usr/lib/systemd/system/sddm.service
+    dest: /etc/systemd/system/display-manager.service
+    state: link
+    force: true
+
+- name: Activer la cible graphique
+  ansible.builtin.command:
+    cmd: systemctl set-default {{ graphical_target }}
+  changed_when: true
+  register: set_graphical
+
+- name: Activer et démarrer SDDM
+  ansible.builtin.systemd:
+    name: sddm
+    enabled: true
+    state: started
+    daemon_reload: true
+  failed_when: false
+
+- name: Résumé post-installation
+  ansible.builtin.debug:
+    msg: >-
+      KDE Plasma {{ plasma_generation }} installé.
+      Redémarrer le Pi pour démarrer sur SDDM / Plasma
+      (session recommandée: Plasma Wayland sur Trixie, Plasma X11 si souci GPU).

@@ -1,0 +1,40 @@
+---
+- name: Mise à jour du cache apt
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Upgrade complet du système
+  ansible.builtin.apt:
+    upgrade: full
+    autoremove: true
+    autoclean: true
+
+- name: Installer utilitaires de base
+  ansible.builtin.apt:
+    name:
+      - sudo
+      - curl
+      - wget
+      - ca-certificates
+      - gnupg
+      - git
+      - python3
+      - python3-apt
+      - rsync
+      - vim
+      - htop
+      - network-manager
+    state: present
+
+- name: Configurer le fuseau horaire
+  community.general.timezone:
+    name: "{{ timezone }}"
+  ignore_errors: true
+
+- name: S'assurer que NetworkManager est actif
+  ansible.builtin.systemd:
+    name: NetworkManager
+    enabled: true
+    state: started
+  failed_when: false

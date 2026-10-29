@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: bmartron
+  description: Installation KDE Plasma (5/6) + SDDM sur Raspberry Pi OS
+  license: MIT
+  min_ansible_version: "2.14"
+dependencies: []

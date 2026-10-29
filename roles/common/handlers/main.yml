@@ -1,0 +1,4 @@
+---
+- name: reboot pi
+  ansible.builtin.reboot:
+    reboot_timeout: 600
